@@ -4,7 +4,6 @@
   "parameters": {
     "vmName": {
       "type": "string",
-      "defaultValue": "testing",
       "metadata": {
         "description": "This is the name of the vm where connector is deployed"
       }
