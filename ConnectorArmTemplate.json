@@ -9,6 +9,13 @@
         "description": "This is the name of the vm where connector is deployed"
       }
     },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v3",
+      "metadata": {
+        "description": "The size of the VM"
+      }
+    },
     "adminUsername": {
       "type": "string",
       "defaultValue": "zsegment",
@@ -25,6 +32,7 @@
   },
   "functions": [],
   "variables": {
+    "storageAccountName": "zsegment",
     "networkSecurityGroupName": "[concat(resourceGroup().name, '-nsg1')]",
     "virtualNetworkName": "[concat(resourceGroup().name, '-vnet1')]",
     "addressPrefix": "10.0.0.0/16",
@@ -35,6 +43,20 @@
     "osDiskType": "Standard_LRS"
   },
   "resources": [
+    {
+      "name": "[variables('storageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-01-01",
+      "tags": {
+        "displayName": "[variables('storageAccountName')]"
+      },
+      "location": "[resourceGroup().location]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Premium_LRS",
+        "tier": "Premium"
+      }
+    },
     {
       "name": "[variables('networkSecurityGroupName')]",
       "type": "Microsoft.Network/networkSecurityGroups",
@@ -157,14 +179,15 @@
       "apiVersion": "2023-03-01",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
       ],
       "tags": {
         "displayName": "[parameters('vmName')]"
       },
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_D2s_v3"
+          "vmSize": "[parameters('vmSize')]"
         },
         "storageProfile": {
           "dataDisks": [],
@@ -210,6 +233,12 @@
             "vTpmEnabled": true
           },
           "securityType": "TrustedLaunch"
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
+          }
         }
       }
     },
