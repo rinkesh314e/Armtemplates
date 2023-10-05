@@ -21,13 +21,6 @@
       "metadata": {
         "description": "The SSH rsa public key file as string "
       }
-    },
-    "adminPassword": {
-      "type": "securestring",
-      "defaultValue": "Password@1",
-      "metadata": {
-        "description": "This is public key file for ssh session auth"
-      }
     }
   },
   "functions": [],
