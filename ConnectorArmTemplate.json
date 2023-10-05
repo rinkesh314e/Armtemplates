@@ -233,7 +233,32 @@
             "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
           }
         }
-
+      }
+    },
+    {
+      "name": "ubuntuVM1/customScript1",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2023-03-01",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "connector script for ubuntu am64 vm"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.1",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "https://raw.githubusercontent.com/rinkesh314e/Armtemplates/main/connector-install-amd64"
+          ]
+        },
+        "protectedSettings": {
+          "commandToExecute": "sudo sh connector-install-amd64"
+        }
       }
     }
   ],
