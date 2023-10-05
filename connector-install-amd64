@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd ~
+sudo curl -o connector_0.0.1-1_amd64.deb https://zsegment.blob.core.windows.net/connector-debs/connector_0.0.1-1_amd64.deb
+sudo dpkg -i ./connector_0.0.1-1_amd64.deb
