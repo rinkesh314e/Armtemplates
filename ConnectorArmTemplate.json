@@ -32,7 +32,7 @@
   },
   "functions": [],
   "variables": {
-    "storageAccountName": "zsegment",
+    "storageAccountName": "zsegment1",
     "networkSecurityGroupName": "[concat(resourceGroup().name, '-nsg1')]",
     "virtualNetworkName": "[concat(resourceGroup().name, '-vnet1')]",
     "addressPrefix": "10.0.0.0/16",
