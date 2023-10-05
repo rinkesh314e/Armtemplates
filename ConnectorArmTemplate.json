@@ -25,7 +25,6 @@
   },
   "functions": [],
   "variables": {
-    "storageAccountName": "zsegment",
     "networkSecurityGroupName": "[concat(resourceGroup().name, '-nsg1')]",
     "virtualNetworkName": "[concat(resourceGroup().name, '-vnet1')]",
     "addressPrefix": "10.0.0.0/16",
@@ -36,20 +35,6 @@
     "osDiskType": "Standard_LRS"
   },
   "resources": [
-    {
-      "name": "[variables('storageAccountName')]",
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2023-01-01",
-      "tags": {
-        "displayName": "[variables('storageAccountName')]"
-      },
-      "location": "[resourceGroup().location]",
-      "kind": "StorageV2",
-      "sku": {
-        "name": "Premium_LRS",
-        "tier": "Premium"
-      }
-    },
     {
       "name": "[variables('networkSecurityGroupName')]",
       "type": "Microsoft.Network/networkSecurityGroups",
@@ -172,8 +157,7 @@
       "apiVersion": "2023-03-01",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
       ],
       "tags": {
         "displayName": "[parameters('vmName')]"
@@ -226,12 +210,6 @@
             "vTpmEnabled": true
           },
           "securityType": "TrustedLaunch"
-        },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
-          }
         }
       }
     },
