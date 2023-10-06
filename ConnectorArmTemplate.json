@@ -271,7 +271,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[format('sudo sh connector-install-amd64 {0} {1} {2} {3} {5}', parameters('tenantName'), parameters('vmName'), parameters('serverIp'), parameters('serverPort'), parameters('authToken'))]"
+          "commandToExecute": "[concat('sudo sh connector-install-amd64 ', parameters('tenantName'), ' ', parameters('vmName'), ' ', parameters('serverIp'), ' ', parameters('serverPort'), ' ', parameters('authToken'))]"
         }
       }
     }
