@@ -4,6 +4,9 @@
   "parameters": {
     "vmName": {
       "value": "test1343"
+    },
+    "adminPublicKey": {
+      "value": "GEN_SSH_PUBLIC_KEYs"
     }
   }
 }

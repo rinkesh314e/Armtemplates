@@ -3,7 +3,7 @@
 cd ~
 
 tenantName=$1
-connectorName=$2
+connectorName=$2 # equivalent to vmName
 serverIp=$3
 serverPort=$4
 authToken=$5

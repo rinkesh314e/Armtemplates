@@ -28,6 +28,34 @@
       "metadata": {
         "description": "The SSH rsa public key file as string "
       }
+    },
+    "tenantName": {
+      "type": "string",
+      "defaultValue": "test2",
+      "metadata": {
+        "description": "the name of the tenant to be used for custom script"
+      }
+    },
+    "serverIp": {
+      "type": "string",
+      "defaultValue": "51.81.66.162",
+      "metadata": {
+        "description": "description"
+      }
+    },
+    "serverPort": {
+      "type": "string",
+      "defaultValue": "27055",
+      "metadata": {
+        "description": "description"
+      }
+    },
+    "authToken": {
+      "type": "string",
+      "defaultValue": "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..LhcAnVxd94rbUT8mHN4w7A.QYxoRdtL0SDYDPSPrNbxitgkN4bQ7Fzbe6Oib97FUxbRnr9mXE0FoaJwnr_SAjv4MB5gXIj8626RndS7CMrx0pvoidlm9LZYjmJwknp3-X7tlXzN-ao2rGrUMvtFgtDVtz5Nz9bpEoNASiedCiF8ZA._8mdK6XIOHz0YSxhXZ95yQ",
+      "metadata": {
+        "description": "description"
+      }
     }
   },
   "functions": [],
@@ -39,7 +67,8 @@
     "subnetPrefix": "10.0.0.0/24",
     "publicIpName": "[concat(parameters('vmName'), '-ip1')]",
     "networkInterfaceName": "[concat(resourceGroup().name, '-ni')]",
-    "osDiskType": "Standard_LRS"
+    "osDiskType": "Standard_LRS",
+    "extensionName": "customScript"
   },
   "resources": [
     {
@@ -221,7 +250,7 @@
       }
     },
     {
-      "name": "ubuntuVM1/customScript1",
+      "name": "[format('{0}/{1}', parameters('vmName'), variables('extensionName'))]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "apiVersion": "2023-03-01",
       "location": "[resourceGroup().location]",
@@ -242,7 +271,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "sudo sh connector-install-amd64"
+          "commandToExecute": "[format('sudo sh connector-install-amd64 {0} {1} {2} {3} {5}', parameters('tenantName'), parameters('vmName'), parameters('serverIp'), parameters('serverPort'), parameters('authToken'))]"
         }
       }
     }
