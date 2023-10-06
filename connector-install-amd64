@@ -1,5 +1,54 @@
 #!/bin/bash
 
 cd ~
+
+tenantName=$1
+connectorName=$2
+serverIp=$3
+serverPort=$4
+authToken=$5
+
+# download connector binary
 sudo curl -o connector_0.0.1-1_amd64.deb https://zsegment.blob.core.windows.net/connector-debs/connector_0.0.1-1_amd64.deb
 sudo dpkg -i ./connector_0.0.1-1_amd64.deb
+
+#create config.yml for connector
+sudo cat <<EOF > /var/connector/config.yml
+tenant_name: $tenantName
+connector_name: $connectorName
+mounts_path: /var/connector/mount
+archive_mounts_path: /var/connector/archive_mounts
+
+grpc:
+  server:
+    url: $serverIp:$serverPort
+    certificate_path: /var/connector/server.rcgen.crt
+  client:
+    name: $connectorName
+    authentication_token: $authToken
+
+log:
+  level: DEBUG
+EOF
+
+# create systemd service for the connector
+sudo cat <<EOF > /etc/systemd/system/connector.service
+[Unit]
+Description=Connector Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/connector /var/connector/config.yml
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=connector
+
+[Install]
+WantedBy=multi-user.targe
+EOF
+
+sudo systemctl daemon-reload
+
+sudo systemctl enable connector
+sudo systemctl start connector
