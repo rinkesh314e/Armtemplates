@@ -9,7 +9,7 @@ serverPort=$4
 authToken=$5
 
 # download connector binary
-sudo curl -o connector_0.0.1-1_amd64.deb https://zsegment.blob.core.windows.net/connector-debs/connector_0.0.1-1_amd64.deb
+sudo curl -o connector_0.0.1-1_amd64.deb https://zsegment.blob.core.windows.net/connector-debs/connector_0.0.1-2_amd64.deb
 sudo dpkg -i ./connector_0.0.1-1_amd64.deb
 
 #create config.yml for connector
